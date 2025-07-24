@@ -1,9 +1,16 @@
-#Exibir histórico de capturas: O histórico de capturas deve ser armazenado em uma lista, onde cada entrada consiste no nome do Pokémon e a quantidade de vezes que foi capturado. Quando o usuário escolher exibir o histórico de capturas, o programa deve mostrar todas as entradas feitas.
+#Não são necessarias dependencias, é um programa simples. Assim que for iniciado irá pedir para digitar um número (que será especificado o que fará)
+#Ao digitar o numero, será redirecionado para a função escolhida, e sempre irá passar o nome de algum pokemon, para que as alterações possam ser feitas
 
+
+
+#Função principal (e unica)
 def main():
 
+    #Dicionario que guarda os pokemons
     dicionario = {}
 
+
+    #Dicionario que guarda as capturas
     capturas = {}
 
 
@@ -21,6 +28,7 @@ def main():
         except ValueError:
             print("Escolha um número inteiro")
 
+        #Aqui os pokemons são adicionados
         if escolha == 1:
             nome = input("Digite o nome do pokemon que deseja adicionar\n")
             tipo = input("Agora digite o tipo do pokemon que deseja adicionar\n")
@@ -44,6 +52,8 @@ def main():
                 print("Esse pokemon ja existe")
 
 
+
+        #Aqui os pokemons são listados
         elif escolha == 2:
             if not dicionario:
                 print("Não existe nenhum pokemon")
@@ -51,6 +61,8 @@ def main():
             for nome in sorted(dicionario):
                 print(f"{nome}: {dicionario[nome]}")
 
+
+        #Aqui deletamos um pokemon do dicionario
         elif escolha == 3:
             deletar = input("Digite o nome do pokemon que deseja remover\n")
 
@@ -60,6 +72,8 @@ def main():
             else:
                 print("Pokemon não encontrado")
 
+
+        #Aqui atualizamos o nivel do pokemon
         elif escolha == 4:
             nome = input("Digite o nome do pokemon que deseja atualizar o nivel\n")
 
@@ -78,6 +92,8 @@ def main():
             else:
                 print("Esse pokemon não existe na sua pokedex")
 
+
+        #Aqui registramos as capturas do pokemon
         elif escolha == 5:
             capturar = input("Digite o nome do pokemon para registrar a captura\n")
 
@@ -86,7 +102,7 @@ def main():
                     quantidade = int(input("Digite a quantidade de vezes que foi capturado\n"))
                 except ValueError:
                     print("Digite um numero inteiro")
-                    
+
                 if capturar not in capturas:
                     capturas[capturar] = quantidade
             
@@ -96,6 +112,8 @@ def main():
             else:
                 print("O pokemon não existe")
 
+
+        #Aqui listamos as capturas dos pokemons
         elif escolha == 6:
             if not capturas:
                 print("Nenhuma captura registrada ainda.")
@@ -105,8 +123,11 @@ def main():
             for nome, qtd in capturas.items():
                 print(f"{nome}: {qtd} vezes")
 
+
+        #Encerra o programa
         elif escolha == 7:
             return
+
 
         else: 
             print("Escolha uma opção válida")
