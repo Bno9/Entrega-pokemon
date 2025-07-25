@@ -1,6 +1,11 @@
 #Não são necessarias dependencias, é um programa simples. Assim que for iniciado irá pedir para digitar um número (que será especificado o que fará)
 #Ao digitar o numero, será redirecionado para a função escolhida, e sempre irá passar o nome de algum pokemon, para que as alterações possam ser feitas
 
+#função para validar se o pokemon existe no dicionario
+def validar_pokemon(dicionario, nome):
+    if nome in dicionario:
+        return False
+    return True
 
 #função reutilizavel de nome do pokemon
 def solicitar_nome():
@@ -86,18 +91,20 @@ def main():
  #Aqui os pokemons são adicionados
 def adicionar_pokemon(dicionario):
     nome = solicitar_nome()
+
+    if not validar_pokemon(dicionario, nome): #Só uma anotação para mim mesmo, a função validar_pokemon() confere se o nome existe no dicionario, caso exista, ele retorna false, ou seja, se fosse um 'if validar_pokemon()' e o pokemon não existisse, o return seria executado e encerraria a função, por isso é um if not
+        print(f"{nome} já existe na pokedex")
+        return
+    
     tipo = input("Digite o tipo do pokemon ")
     nivel = solicitar_nivel()
 
-    if nome not in dicionario:
-        dicionario[nome] = {
-            "tipo": tipo,
-            "nivel": nivel
-        }
-        print(f"{nome} adicionado com sucesso")
+    dicionario[nome] = {
+        "tipo": tipo,
+        "nivel": nivel
+    }
+    print(f"{nome} adicionado com sucesso")
 
-    else:
-        print(f"{nome} ja existe na pokedex")
 
 #Aqui os pokemons são listados
 def listar_pokemons(dicionario):
@@ -112,51 +119,50 @@ def listar_pokemons(dicionario):
 def remover_pokemon(dicionario):
     nome = solicitar_nome()
 
-    if nome in dicionario:
-        del dicionario[nome]
-        print(f"{nome} removido com sucesso.")
-    
-    else:
+    if validar_pokemon(dicionario, nome):
         print(f"{nome} não existe na sua pokedex")
+        return
+    
+    del dicionario[nome]
+    print(f"{nome} removido com sucesso.")
 
 #Aqui o nivel dos pokemons são atualizados
 def atualizar_nivel(dicionario):
     while True:
         nome = solicitar_nome()
 
-        if nome in dicionario:
-            nivel = solicitar_nivel()
-            dicionario[nome]["nivel"] = nivel
-            print("Nivel alterado com sucesso")
+        if validar_pokemon(dicionario, nome):
+            print(f"{nome} não existe na pokedex")
             return
+        
+        nivel = solicitar_nivel()
+        dicionario[nome]["nivel"] = nivel
+        print("Nivel alterado com sucesso")
+        return
 
-        else:
-            print(f"{nome} pokemon não existe na sua pokedex")
-
-#Aqui registramo as capturas dos pokemons
+#Aqui registramos as capturas dos pokemons
 def registrar_captura(dicionario, capturas):
     while True:
         nome = solicitar_nome()
 
-        if nome in dicionario:
-            try:
-                qnt_capturas = solicitar_quantidade()
-
-                for i, captura in enumerate(capturas):
-                    if captura[0] == nome:
-                        capturas[i][1] += qnt_capturas
-                        return
-
-                capturas.append([nome, qnt_capturas])
-                return
-            
-            except ValueError:
-                print("Digite apenas numeros inteiros")
-                continue
-
-
-        else: 
+        if validar_pokemon(dicionario, nome):
             print(f"{nome} não existe na sua pokedex, então não é possivel adicionar capturas a ele")
+            return
+        
+        try:
+            qnt_capturas = solicitar_quantidade()
+
+            for i, captura in enumerate(capturas):
+                if captura[0] == nome:
+                    capturas[i][1] += qnt_capturas
+                    return
+
+            capturas.append([nome, qnt_capturas])
+            return
+            
+        except ValueError:
+            print("Digite apenas numeros inteiros")
+            continue 
 
 #Aqui listamos as capturas dos pokemons
 def exibir_capturas(capturas):
@@ -166,7 +172,7 @@ def exibir_capturas(capturas):
 
      print("Histórico de capturas:")
      for nome, qtd in capturas:
-        print(f"{nome}: {qtd} vezes")
+        print(f"{nome}: {qtd} vezes capturado")
 
 
 main()
